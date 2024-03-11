@@ -82,7 +82,4 @@ C_SRCS__QUOTED += \
 "./syscfg/board.c" \
 "./syscfg/c2000ware_libraries.c" 
 
-SYSCFG_SRCS__QUOTED += \
-"../c2000.syscfg" 
-
 

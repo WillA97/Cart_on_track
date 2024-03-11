@@ -15,7 +15,7 @@ SHELL = cmd.exe
 build-1361122319: ../c2000.syscfg
 	@echo 'Building file: "$<"'
 	@echo 'Invoking: SysConfig'
-	"C:/ti/ccs1230/ccs/utils/sysconfig_1.16.1/sysconfig_cli.bat" -s "C:/ti/c2000/C2000Ware_5_01_00_00/.metadata/sdk.json" -d "F28002x" --script "C:/ti/c2000/Github/Cart_on_track/c2000.syscfg" -o "syscfg" --package 80QFP --part F28002x_80QFP --compiler ccs
+	"C:/ti/ccs1230/ccs/utils/sysconfig_1.16.1/sysconfig_cli.bat" -s "C:/ti/c2000/C2000Ware_5_01_00_00/.metadata/sdk.json" -b "/boards/LAUNCHXL_F280025C" -d "F28002x" --script "C:/ti/c2000/Github/Cart_on_track/c2000.syscfg" -o "syscfg" --package 80QFP --part F28002x_80QFP --compiler ccs
 	@echo 'Finished building: "$<"'
 	@echo ' '
 

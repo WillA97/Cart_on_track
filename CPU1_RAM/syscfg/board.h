@@ -58,12 +58,80 @@ extern "C"
 //
 //*****************************************************************************
 
+//
+// EQEP1 -> Rail_enc Pinmux
+//
+//
+// EQEP1_A - GPIO Settings
+//
+#define GPIO_PIN_EQEP1_A 44
+#define Rail_enc_EQEPA_GPIO 44
+#define Rail_enc_EQEPA_PIN_CONFIG GPIO_44_EQEP1_A
+//
+// EQEP1_B - GPIO Settings
+//
+#define GPIO_PIN_EQEP1_B 37
+#define Rail_enc_EQEPB_GPIO 37
+#define Rail_enc_EQEPB_PIN_CONFIG GPIO_37_EQEP1_B
+//
+// EQEP1_INDEX - GPIO Settings
+//
+#define GPIO_PIN_EQEP1_INDEX 43
+#define Rail_enc_EQEPINDEX_GPIO 43
+#define Rail_enc_EQEPINDEX_PIN_CONFIG GPIO_43_EQEP1_INDEX
+//
+// GPIO31 - GPIO Settings
+//
+#define LED4_pin_GPIO_PIN_CONFIG GPIO_31_GPIO31
+//
+// GPIO34 - GPIO Settings
+//
+#define LED5_pin_GPIO_PIN_CONFIG GPIO_34_GPIO34
+//
+// GPIO27 - GPIO Settings
+//
+#define Test_pin0_GPIO_PIN_CONFIG GPIO_27_GPIO27
+
+//*****************************************************************************
+//
+// EQEP Configurations
+//
+//*****************************************************************************
+#define Rail_enc_BASE EQEP1_BASE
+void Rail_enc_init();
+
+//*****************************************************************************
+//
+// GPIO Configurations
+//
+//*****************************************************************************
+#define LED4_pin 31
+void LED4_pin_init();
+#define LED5_pin 34
+void LED5_pin_init();
+#define Test_pin0 27
+void Test_pin0_init();
+
+//*****************************************************************************
+//
+// INTERRUPT Configurations
+//
+//*****************************************************************************
+
+// Interrupt Settings for INT_Rail_enc
+#define INT_Rail_enc INT_EQEP1
+#define INT_Rail_enc_INTERRUPT_ACK_GROUP INTERRUPT_ACK_GROUP5
+extern __interrupt void INT_Rail_enc_ISR(void);
+
 //*****************************************************************************
 //
 // Board Configurations
 //
 //*****************************************************************************
 void	Board_init();
+void	EQEP_init();
+void	GPIO_init();
+void	INTERRUPT_init();
 void	PinMux_init();
 
 //*****************************************************************************

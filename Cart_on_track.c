@@ -52,6 +52,25 @@
 #include "board.h"
 #include "c2000ware_libraries.h"
 #include "DCL.h"
+#include "math.h"
+
+//
+// Defines
+//
+#define ENCODER_SLOTS   1000U           // LVSERVOMTR is a 1000-line encoder
+#define UNIT_PERIOD     10000U          // Unit period in microseconds
+#define ENC_radius      1            // Encoder radius in centimeters
+
+//
+// Globals
+//
+uint32_t oldCount = 0;                  // stores the previous position counter value
+uint32_t newCount = 0;                  // stores the new position counter value for frequency calculation
+uint32_t currentEncoderPosition = 0;    // stores the current encoder position
+int32_t frequency = 0;                  // measured quadrature signal frequency of motor using eQEP
+float32_t speed = 0.0f;                 // measured speed of motor in rpm
+int32_t direction = 0;                  // direction of rotation of motor
+float distance = 0;                   //linear distance travelled
 
 //
 // Main
@@ -98,10 +117,52 @@ void main(void)
 
     while(1)
     {
-        
+        DEVICE_DELAY_US(500000);
+        GPIO_togglePin(LED4_pin);
+        GPIO_togglePin(LED5_pin);
     }
 }
 
+
+__interrupt void INT_Rail_enc_ISR(void){
+
+    //
+    // Save current encoder position value for monitoring
+    GPIO_togglePin(Test_pin0);
+    //
+    currentEncoderPosition = EQEP_getPosition(Rail_enc_BASE);
+    //
+    // Get position counter value latched on unit time-out event
+    //
+    newCount = EQEP_getPositionLatch(Rail_enc_BASE);
+    //
+    // Gets rotation direction of motor
+    //
+    direction = EQEP_getDirection(Rail_enc_BASE);
+
+    if (direction > 0 ){
+          if (newCount >= oldCount)
+              newCount = newCount - oldCount;
+          else
+              newCount = ((4 * ENCODER_SLOTS - 1) - oldCount) + newCount;
+          }
+      else {
+          if (newCount <= oldCount)
+              newCount = oldCount - newCount;
+          else
+              newCount = ((4 * ENCODER_SLOTS - 1) - newCount) + oldCount;
+          }
+      //
+      // Stores the current position count value to oldCount variable
+      //
+      oldCount = currentEncoderPosition;
+      distance = distance+ direction*(2*3.14159F/4000*(newCount));
+
+
+    EQEP_clearInterruptStatus(Rail_enc_BASE,EQEP_INT_UNIT_TIME_OUT|EQEP_INT_GLOBAL);
+    Interrupt_clearACKGroup(INT_Rail_enc_INTERRUPT_ACK_GROUP);
+
+}
 //
 // End of File
 //
